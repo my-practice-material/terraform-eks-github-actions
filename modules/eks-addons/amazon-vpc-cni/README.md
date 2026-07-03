@@ -1,12 +1,12 @@
-# Amazon VPC CNI Plugin.
+# 📚 Amazon VPC CNI Plugin.
 
 Amazon VPC CNI is the networking plugin used by Amazon EKS to give Kubernetes pods IP addresses directly from your VPC, ensuring pods are first-class citizens in the VPC network.
 
-## Can we use other network plugin other than VPC CNI with EKS❓
+### Can we use other network plugin other than VPC CNI with EKS❓
 
 Yes, you can use other Kubernetes network plugins (like Calico, Cilium, Antrea, or Contrail) instead of Amazon VPC CNI in EKS, but doing so comes with trade‑offs. The biggest drawback is losing native AWS VPC integration — pods won’t get routable VPC IPs, which impacts simplicity, performance, and compatibility with AWS services. 
 
-### Cons of other network plugins with AWS EKS
+### ⚠️ Cons of other network plugins with AWS EKS
 
 - Fargate nodes only support VPC CNI — alternate CNIs cannot run there.
 - Some AWS features (like Security Groups for Pods) rely on VPC CNI.
@@ -14,9 +14,10 @@ Yes, you can use other Kubernetes network plugins (like Calico, Cilium, Antrea, 
 - Amazon VPC CNI is the default and safest choice for EKS because it integrates seamlessly with AWS networking.
 - Alternatives (Calico, Cilium, etc.) can be used for advanced policy or observability, but they add complexity and lose native AWS features.
 - If you adopt an alternate plugin, ensure you have vendor support or strong in‑house networking expertise.
+
 ---
 
-## Steps to install Amazon VPC CNI plugin with Secondary CIDR for POD.
+## 📖 Steps to install Amazon VPC CNI plugin with Secondary CIDR for POD.
 
 1. Need to create IRSA `system:serviceaccount:kube-system:aws-node`
 
@@ -26,7 +27,9 @@ Yes, you can use other Kubernetes network plugins (like Calico, Cilium, Antrea, 
 
 4. Create ENIConfig custom networking 
 
-## 🔎 Why ENIConfig Name Must Match the Availability Zone
+---
+
+### 📖 Why ENIConfig Name Must Match the Availability Zone
 
 The VPC CNI plugin uses the ENI_CONFIG_LABEL_DEF environment variable to decide how to map nodes to ENIConfigs.
 
@@ -48,9 +51,10 @@ CNI searches for ENIConfig named us-east-1a
 If found, it uses the subnet/security groups defined there to allocate pod IPs.
 
 If the ENIConfig name doesn’t match the AZ label, the aws‑node daemonset won’t find it, and pod IP allocation fails.
+
 ---
 
-## 🔎 Why kube‑system Pods Use Primary Subnet
+### 📖 Why kube‑system Pods Use Primary Subnet
 
 Custom networking applies only to regular workloads (pods in your namespaces).
 
