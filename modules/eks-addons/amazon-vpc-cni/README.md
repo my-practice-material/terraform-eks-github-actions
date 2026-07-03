@@ -1,4 +1,4 @@
-# 📚 Amazon VPC CNI Plugin.
+## Amazon VPC CNI Plugin.
 
 Amazon VPC CNI is the networking plugin used by Amazon EKS to give Kubernetes pods IP addresses directly from your VPC, ensuring pods are first-class citizens in the VPC network.
 
