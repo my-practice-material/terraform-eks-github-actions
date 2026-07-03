@@ -1,0 +1,11 @@
+# Default values for Amazon VPC CNI plugin with custom networking support.
+  az1:
+    name: eni-config-az1
+    subnet: subnet-az1
+    securityGroups: 
+      - "sg-az1"
+  az2:
+    name: eni-config-az2
+    subnet: subnet-az2
+    securityGroups: 
+      - "sg-az2"

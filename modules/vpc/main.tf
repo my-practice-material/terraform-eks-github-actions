@@ -4,6 +4,7 @@ module "vpc" {
   version = "6.6.1"
   name = var.vpc_name
   cidr = var.vpc_cidr
+  secondary_cidr_blocks = var.secondary_cidr_blocks
   azs = var.azs
   private_subnets = var.private_subnets
   private_subnet_names = var.private_subnet_names
@@ -20,6 +21,8 @@ module "vpc" {
   }
   tags = var.tags
 }
+
+
 
 # Create security group for VPC Interface Endpoints
 module "vpc_endpoints_security_group" {

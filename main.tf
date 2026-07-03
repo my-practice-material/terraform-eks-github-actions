@@ -17,7 +17,7 @@ module "create_eks_standard_cluster" {
     source = "./modules/eks-standard"
     cluster_name = var.eks_cluster_name
     private_subnet_ids = module.create_vpc.private_subnets
-    public_subnet_ids = module.create_vpc.public_subnets
+    public_subnet_ids = slice(module.create_vpc.public_subnets, 0, 2)
     cluster_admin_role_arn = var.cluster_admin_role_arn
     tags = var.tags
     depends_on = [ module.create_vpc ]
@@ -28,16 +28,12 @@ module "install_vpc_cni" {
   source = "./modules/eks-addons/amazon-vpc-cni"
   cluster_name = var.eks_cluster_name
   vpc_cni_addon_version = var.vpc_cni_addon_version
+  secondary_pod_subnet_az1 = module.create_vpc.public_subnets[0]
+  secondary_pod_subnet_az2 = module.create_vpc.public_subnets[1]
+  node_security_groups = [module.create_eks_standard_cluster.cluster_security_group_id]
   aws_iam_openid_connect_provider_arn = module.create_eks_standard_cluster.aws_iam_openid_connect_provider_arn
   tags = var.tags
-  depends_on = [ module.create_eks_standard_cluster ]
-}
-
-module "install_matrix_server" {
-  source = "./modules/eks-addons/matrix-server"
-  cluster_name = var.eks_cluster_name
-  matrix_server_version = var.matrix_server_version
-  depends_on = [ module.create_eks_standard_cluster ]
+  depends_on = [ module.create_eks_standard_cluster, module.create_vpc ]
 }
 
 # Create EKS cluster-auto-mode.
@@ -72,7 +68,7 @@ module "create_managed_node_group_al2023" {
     vpc_id = module.create_vpc.vpc_id
     worker_node_name = var.worker_node_name
     private_subnet_ids = module.create_vpc.private_subnets
-    public_subnet_ids = module.create_vpc.public_subnets
+    public_subnet_ids = slice(module.create_vpc.public_subnets, 0, 2)
     cluster_security_group_id = module.create_eks_standard_cluster.cluster_security_group_id
     cluster_name = var.eks_cluster_name
     node_group_desired_capacity = var.node_group_desired_capacity
@@ -84,13 +80,13 @@ module "create_managed_node_group_al2023" {
     depends_on = [ module.create_eks_standard_cluster, module.install_vpc_cni ]
 }
 
-module "deploy_cluster_autoscaler" {
-  source = "./modules/eks-compute/kubernetes-cluster-autoscaler"
-  cluster_name = var.eks_cluster_name
-  aws_iam_openid_connect_provider_arn = module.create_eks_standard_cluster.aws_iam_openid_connect_provider_arn
-  tags = var.tags
-  depends_on = [ module.create_managed_node_group_al2023 ]
-}
+# module "deploy_cluster_autoscaler" {
+#   source = "./modules/eks-compute/kubernetes-cluster-autoscaler"
+#   cluster_name = var.eks_cluster_name
+#   aws_iam_openid_connect_provider_arn = module.create_eks_standard_cluster.aws_iam_openid_connect_provider_arn
+#   tags = var.tags
+#   depends_on = [ module.create_managed_node_group_al2023 ]
+# }
 
 # Create AWS Managed Node Group for EKS cluster with Bottlerocket AMI.
 # module "create_managed_node_group-bottlerocket" {
@@ -173,13 +169,13 @@ module "deploy_cluster_autoscaler" {
 # }
 
 # Deploy Amazon EBS CSI Driver for EKS cluster.
-module "install_ebs_csi_driver" {
-  source = "./modules/eks-addons/amazon-ebs-csi-driver"
-  cluster_name = var.eks_cluster_name
-  aws_iam_openid_connect_provider_arn = module.create_eks_standard_cluster.aws_iam_openid_connect_provider_arn
-  tags = var.tags
-  depends_on = [ module.create_managed_node_group_al2023 ]
-}
+# module "install_ebs_csi_driver" {
+#   source = "./modules/eks-addons/amazon-ebs-csi-driver"
+#   cluster_name = var.eks_cluster_name
+#   aws_iam_openid_connect_provider_arn = module.create_eks_standard_cluster.aws_iam_openid_connect_provider_arn
+#   tags = var.tags
+#   depends_on = [ module.create_managed_node_group_al2023 ]
+# }
 
 # Deploy Amazon EFS CSI Driver for EKS cluster.
 # module "install_efs_csi_driver" {
@@ -188,6 +184,13 @@ module "install_ebs_csi_driver" {
 #   aws_iam_openid_connect_provider_arn = module.create_eks_standard_cluster.aws_iam_openid_connect_provider_arn
 #   tags = var.tags
 #   depends_on = [ module.create_managed_node_group_al2023 ]
+# }
+
+# module "install_matrix_server" {
+#   source = "./modules/eks-addons/matrix-server"
+#   cluster_name = var.eks_cluster_name
+#   matrix_server_version = var.matrix_server_version
+#   depends_on = [ module.create_eks_standard_cluster ]
 # }
 
 # module "create_ecr_repo" {

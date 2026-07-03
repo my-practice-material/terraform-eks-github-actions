@@ -3,13 +3,16 @@
 # VPC Configuration
 vpc_name = "study-vpc"
 vpc_cidr = "10.10.0.0/20"
+secondary_cidr_blocks = ["100.64.0.0/16"]
 azs = ["us-east-1a", "us-east-1b"]
-elb_public_subnets = ["10.10.1.0/24", "10.10.2.0/24"]
-elb_public_subnets_names = ["study-vpc-elb-pub-sbnt-az1", "study-vpc-elb-pub-sbnt-az2"]
+elb_public_subnets = ["10.10.1.0/24", "10.10.2.0/24", "100.64.0.0/22", "100.64.4.0/22"]
+elb_public_subnets_names = ["study-vpc-elb-pub-sbnt-az1", "study-vpc-elb-pub-sbnt-az2", "secondary-pod-subnet-az1", "secondary-pod-subnet-az2"]
 app_private_subnets = ["10.10.3.0/24", "10.10.4.0/24"]
 app_private_subnet_names = ["study-vpc-app-priv-sbnt-az1", "study-vpc-app-priv-sbnt-az2"]
 db_private_subnets = ["10.10.5.0/24", "10.10.6.0/24"]
 db_private_subnet_names = ["study-vpc-db-priv-sbnt-az1", "study-vpc-db-priv-sbnt-az2"]
+secondary_pod_subnet_az1_name = "secondary-pod-subnet-az1"
+secondary_pod_subnet_az2_name = "secondary-pod-subnet-az2"
 
 # EKS Cluster Configuration
 eks_cluster_name = "study-eks-cluster"

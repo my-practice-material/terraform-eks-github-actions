@@ -12,6 +12,12 @@ variable "vpc_cidr" {
   default     = "10.10.0.0/20"
 } 
 
+variable "secondary_cidr_blocks" {
+  type        = list(string)
+  description = "List of secondary CIDR blocks for the VPC"
+  default     = ["100.64.0.0/16"]
+}
+
 variable "azs" {
   type        = list(string)
   description = "List of Availability Zones to use for subnets"
@@ -134,4 +140,16 @@ variable "ecr_repo_name" {
   type = string
   description = "ECR repository name"
   default = "study/study-ecr-repo"
+}
+
+variable "secondary_pod_subnet_az1_name" {
+  description = "The name of the secondary subnet for pods in availability zone 1"
+  type        = string
+  default     = "study-vpc-pod-priv-sbnt-az1"
+}
+
+variable "secondary_pod_subnet_az2_name" {
+  description = "The name of the secondary subnet for pods in availability zone 2"
+  type        = string
+  default     = "study-vpc-pod-priv-sbnt-az2"
 }

@@ -1,0 +1,29 @@
+{{/*
+  ENIConfig manifest for AZ1
+*/}}
+---
+apiVersion: crd.k8s.amazonaws.com/v1alpha1
+kind: ENIConfig
+metadata:
+  name: {{ .Values.az1.name }}
+spec:
+  subnet: {{ .Values.az1.subnet }}
+  securityGroups:
+    {{- range .Values.az1.securityGroups }}
+    - {{ . }}
+    {{- end }}
+
+{{/*
+  ENIConfig manifest for AZ2
+*/}}
+---
+apiVersion: crd.k8s.amazonaws.com/v1alpha1
+kind: ENIConfig
+metadata:
+  name: {{ .Values.az2.name }}
+spec:
+  subnet: {{ .Values.az2.subnet }}
+  securityGroups:
+    {{- range .Values.az2.securityGroups }}
+    - {{ . }}
+    {{- end }}

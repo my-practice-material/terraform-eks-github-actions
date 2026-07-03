@@ -16,6 +16,7 @@ This repository demonstrates how to:
 - AWS CLI installed and configured.
 - GitHub repository secrets set:
   - `GutHub Actions AWS OIDC Role` 
+- Steps to create OIDC role for github actions- https://docs.github.com/en/actions/how-tos/secure-your-work/security-harden-deployments/oidc-in-aws
 
 ---
 

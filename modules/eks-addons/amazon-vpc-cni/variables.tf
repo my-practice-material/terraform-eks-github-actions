@@ -21,3 +21,33 @@ variable "vpc_cni_addon_version" {
   type        = string
   default     = "v1.21.1-eksbuild.1"  
 }
+
+variable "secondary_pod_subnet_az1" {
+  description = "The ID of the secondary subnet for pods in availability zone 1"
+  type        = string
+  default     = ""
+}
+
+variable "secondary_pod_subnet_az2" {
+  description = "The ID of the secondary subnet for pods in availability zone 2"
+  type        = string
+  default     = ""
+}
+
+variable "secondary_pod_subnet_az1_name" {
+  description = "The name of the secondary subnet for pods in availability zone 1"
+  type        = string
+  default     = ""
+}
+
+variable "secondary_pod_subnet_az2_name" {
+  description = "The name of the secondary subnet for pods in availability zone 2"
+  type        = string
+  default     = ""
+}
+
+variable "node_security_groups" {
+  description = "List of security group IDs to associate with the secondary pod subnets"
+  type        = list(string)
+  default     = []
+}

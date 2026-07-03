@@ -1,0 +1,4 @@
+apiVersion: v2
+name: eks-custom-networking
+description: A Helm chart for Amazon VPC CNI plugin with custom networking support
+version: 1.0.0
